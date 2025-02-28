@@ -1,0 +1,40 @@
+name: Deploy Backend RDS
+on:
+   push:
+     branches:
+       - main
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}                              
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        run: |
+          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_BACKEND }}
+
+      - name: Build and Push Docker Image backend_rds
+        run: |
+          docker build -t backend_rds . -f ./backend_rds/Dockerfile
+          docker tag backend_rds:latest ${{secrets.ECR_REPOSITORY_BACKEND_RDS}}:latest
+          docker push ${{secrets.ECR_REPOSITORY_BACKEND_RDS}}:latest
+
+      - name: Build and Push Docker Image backend_redis
+        run: |
+          docker build -t backend_redis . -f ./backend_redis/Dockerfile
+          docker tag backend_redis:latest ${{secrets.ECR_REPOSITORY_BACKEND_REDIS}}:latest
+          docker push ${{secrets.ECR_REPOSITORY_BACKEND_REDIS}}:latest
+
+      - name: Build and Push Docker Image frontend
+        run: |
+          docker build -t frontend . -f ./frontend/Dockerfile
+          docker tag frontend:latest ${{secrets.ECR_REPOSITORY_FRONDEND}}:latest
+          docker push ${{secrets.ECR_REPOSITORY_FRONTEND}}:latest
