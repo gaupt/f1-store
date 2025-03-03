@@ -24,12 +24,11 @@ jobs:
       - name: Debug AWS Credentials
         run: aws sts get-caller-identity
 
-      - name: Set DNS Resolver
-        run: echo "nameserver 8.8.8.8" | sudo tee /etc/resolv.conf
-  
       - name: Login to Amazon ECR
-        run: |
-          aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_BACKEND_RDS }}
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+        #  run: |
+        #  aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_BACKEND_RDS }}
 
       - name: Build and Push Docker Image backend_rds
         run: |
