@@ -25,9 +25,10 @@ jobs:
         run: aws sts get-caller-identity
 
       - name: Login to Amazon ECR
-        id: login-ecr
+        #id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         #run: |
+          echo "Logging into AWS ECR"
           aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.ECR_REPOSITORY_BACKEND_RDS }}
 
       - name: Build and Push Docker Image backend_rds
