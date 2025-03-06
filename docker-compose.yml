@@ -24,7 +24,7 @@ services:
       NAME: "postgres_bk"
 
   backend_rds:
-    image: backend_rds:0.1.0
+    image: 954976286648.dkr.ecr.us-east-1.amazonaws.com/backend-rds:latest
     depends_on:
       postgres:
         condition: service_healthy
@@ -46,7 +46,7 @@ services:
       - "6379:6379"
 
   backend_redis:
-    image: backend_redis:0.1.0
+    image: 954976286648.dkr.ecr.us-east-1.amazonaws.com/backend-redis:latest
     depends_on:
       - redis
     environment:
@@ -56,12 +56,7 @@ services:
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
     ports:
       - "8080:8080"
-
-  frontend:
-    image: frontend:0.1.0
-    ports:
-      - "3000:80"  # Assuming the frontend serves on port 80 inside the container
-
+  
 volumes:
   rds-data:
 
