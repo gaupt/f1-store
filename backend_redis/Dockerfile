@@ -1,8 +1,8 @@
 FROM python:3.11-slim
 
 WORKDIR /backend_redis
-
-COPY ./backend_redis/requirements.txt requirements.txt
+RUN ./backend_redis/
+COPY requirements.txt requirements.txt
 
 RUN apt-get update && apt-get install -y \
     gcc python3-dev libpq-dev \
