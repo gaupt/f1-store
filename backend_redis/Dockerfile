@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
 WORKDIR /backend_redis
-RUN ./backend_redis/
+#RUN ./backend_redis/
 COPY requirements.txt requirements.txt
 
 RUN apt-get update && apt-get install -y \

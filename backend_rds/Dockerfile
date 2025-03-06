@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
 WORKDIR /backend_rds
-RUN cd ./backend_rds/
+#RUN cd ./backend_rds/
 #COPY requirements.txt .
 COPY requirements.txt requirements.txt
 
