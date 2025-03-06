@@ -2,11 +2,11 @@ FROM python:3.11-slim
 
 WORKDIR "/backend_rds"
 
-COPY /backend_rds/requirements.txt requirements.txt
+COPY /backend_rds/* *
 
-COPY /backend_rds/backend_rds /backend_rds
+#COPY /backend_rds/backend_rds /backend_rds
 
-COPY /backend_rds/manage.py manage.py
+#COPY /backend_rds/manage.py manage.py
 
 RUN apt-get update && apt-get install -y \
     gcc python3-dev libpq-dev \
