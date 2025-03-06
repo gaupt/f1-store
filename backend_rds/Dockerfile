@@ -1,9 +1,8 @@
 FROM python:3.11-slim
 
-WORKDIR /backend_rds
-#RUN cd ./backend_rds/
-#COPY requirements.txt .
-COPY requirements.txt requirements.txt
+WORKDIR "/backend_rds"
+
+COPY /backend_rds/requirements.txt requirements.txt
 
 RUN apt-get update && apt-get install -y \
     gcc python3-dev libpq-dev \
