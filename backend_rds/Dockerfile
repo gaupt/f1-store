@@ -2,7 +2,7 @@ FROM python:3.11-slim
 
 WORKDIR "/backend_rds"
 
-COPY /backend_rds/* *
+COPY ./backend_rds 
 
 #COPY /backend_rds/backend_rds /backend_rds
 
