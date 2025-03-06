@@ -4,6 +4,8 @@ WORKDIR "/backend_redis"
 #RUN ./backend_redis/
 COPY /backend_redis/requirements.txt requirements.txt
 
+COPY /backend_redis/backend_redis/ /backend_redis/
+
 COPY /backend_redis/manage.py manage.py
 
 RUN apt-get update && apt-get install -y \
