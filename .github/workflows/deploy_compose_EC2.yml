@@ -19,6 +19,10 @@ jobs:
           echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+      
+      - name: Copy docker-compose.yml to EC2
+        run: |
+          scp docker-compose.yml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/docker-compose.yml    
 
       - name: SSH into EC2 and Deploy
         run: |
@@ -26,25 +30,32 @@ jobs:
             set -e  
             cd /home/ubuntu
             echo "Current directory: $(pwd)"
-            ls -lah
-
-            # Clone repo if not exists, otherwise pull latest changes
-            if [ ! -d "f1-store" ]; then
-              git clone https://github.com/gaupt/f1-store.git
-            else
-              echo "Repository found, pulling latest changes..."
-              cd f1-store
-              git reset --hard
-              git pull origin develop
-            fi
+            #ls -lah
             
-            cd f1-store
+            if ! cmp -s docker-compose.yml docker-compose.old.yml; then
+              echo "Changes detected in docker-compose.yml. Restarting services..."
+              
+              cp docker-compose.yml docker-compose.old.yml
+
+              #if [ ! -d "f1-store" ]; then
+              #  git clone https://github.com/gaupt/f1-store.git
+              #else
+              #  echo "Repository found, pulling latest changes..."
+              #  cd f1-store
+              # git reset --hard
+              #git pull origin develop
+              #fi
+            
+              #cd f1-store
 
             # Ensure Docker is running
-            sudo systemctl start docker
+              sudo systemctl start docker
 
             # Start/restart services
-            docker compose down
-            docker compose pull
-            docker compose -f docker-compose.yml up -d
+              docker compose down
+              docker compose pull
+              docker compose -f docker-compose.yml up -d
+            else
+              echo "No changes detected, skipping restart."
+            fi
           EOF
