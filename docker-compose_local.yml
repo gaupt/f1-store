@@ -41,7 +41,6 @@ services:
   redis:
     image: redis:7.4.2-alpine
     environment:
-      REDIS_DB: "${REDIS_DB}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
     ports:
       - "6379:6379"
@@ -52,13 +51,17 @@ services:
       - redis
     environment:
       CORS_ALLOWED_ORIGINS: "${CORS_ALLOWED_ORIGINS}"
-      REDIS_DB: "${REDIS_DB}"
       REDIS_HOST: "${REDIS_HOST}"
       REDIS_PORT: "${REDIS_PORT}"
       REDIS_PASSWORD: "${REDIS_PASSWORD}"
     ports:
       - "8080:8080"
-  
+
+  frontend:
+    image: frontend:0.1.0
+    ports:
+      - "3000:80"  # Assuming the frontend serves on port 80 inside the container
+
 volumes:
   rds-data:
 

@@ -22,7 +22,8 @@ jobs:
       
       - name: Copy docker-compose.yml to EC2
         run: |
-          scp docker-compose.yml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/docker-compose.yml    
+          scp docker-compose.yml ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/docker-compose.yml
+          scp .env ubuntu@${{ secrets.EC2_HOST }}:/home/ubuntu/.env    
 
       - name: SSH into EC2 and Deploy
         run: |
@@ -52,9 +53,9 @@ jobs:
               sudo systemctl start docker
 
             # Start/restart services
-              docker compose down
-              docker compose pull
-              docker compose -f docker-compose.yml up -d
+              docker-compose down
+              docker-compose pull
+              docker-compose -f docker-compose.yml up -d
             else
               echo "No changes detected, skipping restart."
             fi
