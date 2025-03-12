@@ -1,0 +1,47 @@
+name: Deploy to AWS EC2
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+ 
+      - name: Set up SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
+
+      - name: SSH into EC2 and Deploy
+        run: |
+          ssh ubuntu@${{ secrets.EC2_HOST }} << 'EOF'
+            set -e  
+            cd /home/ubuntu
+
+            # Clone repo if not exists, otherwise pull latest changes
+            if [ ! -d "f1-store" ]; then
+              git clone git@github.com/gaupt/f1-store.git f1-store
+            else
+              cd f1-store
+              git reset --hard
+              git pull origin main
+            fi
+            
+            cd my-repo
+
+            # Ensure Docker is running
+            sudo systemctl start docker
+
+            # Start/restart services
+            docker-compose down
+            docker-compose pull
+            docker-compose up -d
+          EOF
