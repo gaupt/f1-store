@@ -35,7 +35,7 @@ jobs:
               git pull origin main
             fi
             
-            cd my-repo
+            cd f1-store
 
             # Ensure Docker is running
             sudo systemctl start docker
