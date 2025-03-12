@@ -9,7 +9,7 @@ services:
       POSTGRES_DB: "${DB_NAME}"
       PGDATA: "${PGDATA}"
     volumes:
-      - .:/docker-entrypoint-initdb.d
+            # - .:/docker-entrypoint-initdb.d
       - rds-data:/var/lib/postgresql/data  
     ports: 
       - "5432:5432"
