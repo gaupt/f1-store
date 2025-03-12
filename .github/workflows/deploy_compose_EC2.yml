@@ -42,7 +42,7 @@ jobs:
             sudo systemctl start docker
 
             # Start/restart services
-            docker-compose down
-            docker-compose pull
-            docker-compose up -d
+            docker compose down
+            docker compose pull
+            docker compose -f docker-compose.yml up -d
           EOF
