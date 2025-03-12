@@ -28,7 +28,7 @@ jobs:
 
             # Clone repo if not exists, otherwise pull latest changes
             if [ ! -d "f1-store" ]; then
-              git clone git@github.com/gaupt/f1-store.git f1-store
+              git clone git@github.com/gaupt/f1-store.git
             else
               ls -la
               cd f1-store
